@@ -1,19 +1,22 @@
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const common = require('./webpack.common.js')
-const autoprefixer = require('autoprefixer')
+const path = require('path');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const common = require('./webpack.common.js');
+const autoprefixer = require('autoprefixer');
 
 module.exports = merge(common, {
   mode: 'development',
   devtool: "source-map",
   devServer: {
+    contentBase: path.join(__dirname, 'src'),
     hot: true,
+    compress: true,
     port: 3000,
     open: true
   },
   module: {
     rules: [{
-      test: /\.scss$/,
+      test: /\.(sa|sc|c)ss$/,
       use: [
         {
           loader: "style-loader"
@@ -34,7 +37,7 @@ module.exports = merge(common, {
               autoprefixer
             ]
           },
-        },        
+        },
         {
           loader: "sass-loader", options: {
             sourceMap: true
