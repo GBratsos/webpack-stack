@@ -8,5 +8,5 @@ This stack compiles SCSS and JS, minifies images, CSS and HTML.
 # Directions
 
 * cd into directory and run `npm install`.
-* For development run `npm run dev`.
+* For development run `npm run watch`.
 * For production run `npm run prod`.
