@@ -1,21 +1,35 @@
-const merge = require('webpack-merge');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const common = require('./webpack.common.js');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+//const { VueLoaderPlugin } = require('vue-loader');
 
-module.exports = merge(common, {
+
+module.exports = {
   mode: 'production',
+  entry: './src/index.js',
   optimization: {
+    minimize: true,
     minimizer: [
-      new UglifyJsPlugin({
+    new TerserPlugin({
         cache: true,
         parallel: true,
-        sourceMap: false // set to true if you want JS source maps
-      }),
-      new OptimizeCSSAssetsPlugin({})
+        sourceMap: false,
+        terserOptions: {
+          output: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+    }),
+    new OptimizeCSSAssetsPlugin({})
     ]
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.bundle.js'
   },
   module: {
     rules: [
@@ -38,14 +52,58 @@ module.exports = merge(common, {
               ]
             },
           },
-          'sass-loader',
-        ],
-      }
-    ]
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: 'fonts/[name].[ext]'
+          }
+        }]
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'img/',
+              useRelativePath: true,
+            }
+          },
+        ]
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      // {
+      //   test: /\.vue$/,
+      //   loader: 'vue-loader'
+      // },
+    ],
   },
   plugins: [
+    // new webpack.ProvidePlugin({
+    //   $: "jquery",
+    //   jQuery: "jquery"
+    // }),
+    //new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: 'style.css'
     })
-  ]
-})
+  ],
+  resolve: {
+    alias: {
+      //vue: 'vue/dist/vue.js',
+      //jquery: 'jquery/dist/jquery.js'
+    }
+  }
+};
