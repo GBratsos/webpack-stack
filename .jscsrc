@@ -20,7 +20,6 @@
         ]
     },
     "requireSpacesInForStatement": true,
-    "requireParenthesesAroundIIFE": true,
     "requireLineFeedAtFileEnd": true,
     "requireBlocksOnNewline": {
         "includeComments": true,
