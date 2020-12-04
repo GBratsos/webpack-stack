@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 
 module.exports = {
   mode: 'development',
@@ -14,41 +13,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.(scss|css)$/,
         use: [
-          {
-            loader: "style-loader"
-          },
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              autoprefixer: {
-                browsers: ['last 2 versions', 'ie >= 9']
-              },
-              sourceMap: true,
-              plugins: () => [
-                autoprefixer
-              ]
-            }
-          },
-          {
-            loader: "sass-loader",
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
+          'style-loader',
+          {loader: 'css-loader', options: {sourceMap: true, importLoaders: 1}},
+          {loader: 'postcss-loader', options: {sourceMap: true}},
+          {loader: 'sass-loader', options: {sourceMap: true}},
+        ],
       },
-      // {
-      //   test: /\.vue$/,
-      //   loader: 'vue-loader'
-      // },
+
+
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
@@ -56,6 +30,7 @@ module.exports = {
           loader: 'babel-loader'
         }
       },
+
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         use: [{
@@ -65,32 +40,14 @@ module.exports = {
           }
         }]
       },
+
       {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'img/',
-              useRelativePath: true,
-            }
-          },
-        ]
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+        test: /\.(jpe?g|png|gif)$/i,
       },
     ],
   },
-  plugins: [
-    // new webpack.ProvidePlugin({
-    //   $: "jquery",
-    //   jQuery: "jquery"
-    // })
-    //new VueLoaderPlugin()
-  ],
-  resolve: {
-    alias: {
-      //vue: 'vue/dist/vue.js',
-      //jquery: 'jquery/dist/jquery.js'
-    }
-  }
 }
