@@ -4,10 +4,17 @@
       "@babel/preset-env",
       {
         "modules": false,
-        "useBuiltIns": "usage",
+        "useBuiltIns": "entry",
         "corejs": 3,
         "targets": {
-          "browsers": ["> 1%", "last 2 versions", "not ie <= 8", "ie >= 11"]
+          "browsers": [
+            "edge >= 16",
+            "safari >= 9",
+            "firefox >= 57",
+            "ie >= 11",
+            "ios >= 9",
+            "chrome >= 49"
+          ]
         }
       }
     ]
